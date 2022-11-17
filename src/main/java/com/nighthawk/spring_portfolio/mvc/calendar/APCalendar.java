@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.calendar;
-
+import java.util.*;
+import java.util.Calendar;
 // Prototype Implementation
 
 public class APCalendar {
@@ -10,19 +11,17 @@ public class APCalendar {
      */          
     public static boolean isLeapYear(int year) {
         // implementation not shown
-        if (year % 4 == 0){
-            if (year % 400 == 0){
-                return true;
-            }
-            if (year % 100 == 0){
-                return false;
-            }
+        if(year % 400 == 0){
             return true;
         }
-        else{
+        if(year % 100 == 0){
             return false;
         }
+        if(year % 4 == 0){
+            return true;
         }
+        return false;
+    }
         
     /** Returns the value representing the day of the week 
      * 0 denotes Sunday, 
@@ -32,8 +31,8 @@ public class APCalendar {
     */
     private static int firstDayOfYear(int year) {
         // implementation not shown
-
-        return 0;
+        Date currentDate = new Date(year-1900, 0, 1);
+        return currentDate.getDay();
         }
 
 
@@ -44,9 +43,10 @@ public class APCalendar {
      * dayOfYear(3, 1, 2016) returns 61, since 2016 is a leap year. 
     */ 
     private static int dayOfYear(int month, int day, int year) {
-        // implementation not shown
-
-        return 1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month-1, day);
+        int date = cal.get(Calendar.DAY_OF_YEAR);
+        return date;
         }
 
     /** Returns the number of leap years between year1 and year2, inclusive.
@@ -54,8 +54,13 @@ public class APCalendar {
     */ 
     public static int numberOfLeapYears(int year1, int year2) {
          // to be implemented in part (a)
-
-        return 0;
+        int count = 0;
+        for (int i = year1; i<=year2; i++){
+            if (isLeapYear(i)){
+                count++;
+            }
+        }
+        return count;
         }
 
     /** Returns the value representing the day of the week for the given date
@@ -63,7 +68,10 @@ public class APCalendar {
     */
     public static int dayOfWeek(int month, int day, int year) { 
         // to be implemented in part (b)
-        return 0;
+        int firstDay = firstDayOfYear(year);
+        int date = dayOfYear(month, day, year) - 1;
+        int out = firstDay + date;
+        return(out %7);
         }
 
     /** Tester method */
@@ -79,6 +87,8 @@ public class APCalendar {
 
         System.out.println(APCalendar.isLeapYear(2019));
         System.out.println(APCalendar.isLeapYear(2016));
+        System.out.println(APCalendar.dayOfWeek(8, 4, 1953));
+        System.out.println(APCalendar.numberOfLeapYears(1983, 2022));
     }
 
 }
