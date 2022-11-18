@@ -29,7 +29,7 @@ public class APCalendar {
      * 6 denotes Saturday. 
      * firstDayOfYear(2019) returns 2 for Tuesday.
     */
-    private static int firstDayOfYear(int year) {
+    public static int firstDayOfYear(int year) {
         // implementation not shown
         Date currentDate = new Date(year-1900, 0, 1);
         return currentDate.getDay();
@@ -42,7 +42,7 @@ public class APCalendar {
      * dayOfYear(3, 1, 2017) returns 60, since 2017 is not a leap year
      * dayOfYear(3, 1, 2016) returns 61, since 2016 is a leap year. 
     */ 
-    private static int dayOfYear(int month, int day, int year) {
+    public static int dayOfYear(int month, int day, int year) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month-1, day);
         int date = cal.get(Calendar.DAY_OF_YEAR);
@@ -84,11 +84,6 @@ public class APCalendar {
         System.out.println("isLeapYear: " + APCalendar.isLeapYear(2022));
         System.out.println("numberOfLeapYears: " + APCalendar.numberOfLeapYears(2000, 2022));
         System.out.println("dayOfWeek: " + APCalendar.dayOfWeek(1, 1, 2022));
-
-        System.out.println(APCalendar.isLeapYear(2019));
-        System.out.println(APCalendar.isLeapYear(2016));
-        System.out.println(APCalendar.dayOfWeek(8, 4, 1953));
-        System.out.println(APCalendar.numberOfLeapYears(1983, 2022));
     }
 
 }

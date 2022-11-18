@@ -37,4 +37,14 @@ public class CalendarApiController {
     }
 
     // add other methods
+    @GetMapping("/firstDayOfYear/{year}")
+    public ResponseEntity<JsonNode> firstDayOfYear(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
+      Year year_obj = new Year();
+      year_obj.setYear(year);  // evaluates Leap Year
+
+      ObjectMapper mapper = new ObjectMapper(); 
+      JsonNode json = mapper.readTree(year_obj.firstDayOfYearToString());; // this requires exception handling
+
+      return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
+    }
 }
