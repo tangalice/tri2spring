@@ -106,12 +106,12 @@ public class Person {
         return (int)(mhrCalculator() * 0.85);
     }
 
-    public String bmiToString() {
-        return("{ \"bmi\": " + this.getBmi() +"}");
-    }
-
     public String rateToString() {
         return("{ \"rate\": " + this.getRate1() +"-" + this.getRate2() +"}");
+    }
+
+    public String bmiToString() {
+        return("{ \"bmi\": " + this.getBmi() +"}");
     }
 
     public String toString(){
