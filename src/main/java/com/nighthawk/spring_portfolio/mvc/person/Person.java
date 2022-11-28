@@ -87,37 +87,31 @@ public class Person {
         return -1;
     }
     public double getBmi() {
-            double bmi = (703 * this.weight / Math.pow(this.height,2));
+            double bmi = (703*this.weight / Math.pow(this.height,2));
             return bmi;
     }
 
-    public double bmrCalculator() {
-        if (getGender().equals("male")) {
-            return 88.362 + (13.397 * getWeight() / 2.205) + (4.799 * getHeight() * 2.54) - (5.677 * getAge());
-        } else if (getGender().equals("female")) {
-            return 447.593 + (9.247 * getWeight() / 2.205) + (3.098 * getHeight() * 2.54) - (4.330 * getAge());
-        } else {
-            return -1;
-        }
+    // Max heart rate
+    public double mhrCalculator() {
+        return 220 - getAge();
     }
-    public double amrCalculator() {
-        return bmrCalculator() * 1.55;
+
+    // Target Heart Rate
+    // recommended that you exercise within 55 to 85 percent of your maximum heart rate for at least 20 to 30 minutes to get the best results from aerobic exercise.
+    public int getRate1() {
+        return (int)(mhrCalculator() * 0.55);
     }
-    // Calories required to burn per day to maintain current weight (Uses Active &
-    // Basal Metabolic Rate)
-    public int getStep() {
-        if (getDob() != null && getWeight() != 0 && getHeight() != 0) {
-            // assumes moderate exercise each day, indicates calories needed to burn
-            return (int) (Math.round(amrCalculator() - bmrCalculator() - 500) / 0.04);
-        }
-        return -1;
+
+    public int getRate2() {
+        return (int)(mhrCalculator() * 0.85);
     }
-    public String getBmiToString() {
+
+    public String bmiToString() {
         return("{ \"bmi\": " + this.getBmi() +"}");
     }
 
-    public String getStepToString() {
-        return("{ \"step\": " + this.getStep() +"}");
+    public String rateToString() {
+        return("{ \"rate\": " + this.getRate1() +"-" + this.getRate2() +"}");
     }
 
     public String toString(){

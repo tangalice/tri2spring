@@ -43,25 +43,25 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
-    @GetMapping("/getBmi/{id}")
-    public String getBmi(@PathVariable long id) {
+    @GetMapping("/getRate/{id}")
+    public String getRate(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
-            String bmiToString = person.getBmiToString();
-            return bmiToString;
+            String rateToString = person.rateToString();
+            return rateToString;
         }
         // Bad ID
         return "error";       
     }
 
-    @GetMapping("/getStep/{id}")
-    public String getStep(@PathVariable long id) {
+    @GetMapping("/getBmi/{id}")
+    public String getBmi(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
-            String stepToString = person.getStepToString();
-            return stepToString;
+            String bmiToString = person.bmiToString();
+            return bmiToString;
         }
         // Bad ID
         return "error";       
