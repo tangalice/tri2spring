@@ -124,7 +124,7 @@ public class Person {
         return ("{\"email\": " + this.email + ", " + "\"password\": " + this.password + ", " + "\"name\": " + this.name + ", " + "\"dob\": " + this.dob + " \"height\": " + this.height + ", \"weight\": " + this.weight + "}" );
     } 
     public static void main(String[] args){
-        LocalDate dob = LocalDate.of(2006,07,19);
+        LocalDate dob = LocalDate.of(2005,01,30);
         Date date = Date.from(dob.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Person noArgsPerson = new Person();
         Person allArgsPerson = new Person("alicetang05@gmail.com","pineapple", "Alice Tang", date, 66, 107, "female");
