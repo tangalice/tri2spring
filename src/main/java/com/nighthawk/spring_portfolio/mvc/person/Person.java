@@ -79,6 +79,7 @@ public class Person {
         this.weight = weight;
         this.gender = gender;
     }
+    
     // A custom getter to return age from dob attribute
     public int getAge() {
         if (this.dob != null) {
