@@ -24,12 +24,12 @@ public class Calculator {
     private final Map<String, Integer> OPERATORS = new HashMap<>();
     {
         // Map<"token", precedence>
+        OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
         OPERATORS.put("/", 3);
         OPERATORS.put("%", 3);
         OPERATORS.put("+", 4);
         OPERATORS.put("-", 4);
-        OPERATORS.put("^", 1);
     }
 
     // Helper definition for supported operators
@@ -46,8 +46,7 @@ public class Calculator {
         // original input
         this.expression = expression;
 
-        // parentheses imbalance check
-        this.parenthesesCheck();
+        this.parenthesisCheck();
 
         // parse expression into terms
         this.termTokenizer();
@@ -57,22 +56,6 @@ public class Calculator {
 
         // calculate reverse polish notation
         this.rpnToResult();
-    }
-
-    private void parenthesesCheck() {
-        int leftParentheses = 0;
-        int rightParentheses = 0;
-        for (int i = 0; i < this.expression.length(); i++) {
-            if (this.expression.charAt(i) == '(') {
-                leftParentheses++;
-            } else if (this.expression.charAt(i) == ')') {
-                rightParentheses++;
-            }
-        }
-
-        if (leftParentheses != rightParentheses) {
-            throw new RuntimeException("Check Parentheses");
-        }
     }
 
     // Test if token is an operator
@@ -90,20 +73,36 @@ public class Calculator {
     // Compare precedence of operators.
     private Boolean isPrecedent(String token1, String token2) {
         // token 1 is precedent if it is greater than token 2
-        return (OPERATORS.get(token1) - OPERATORS.get(token2) >= 0);
+        return (OPERATORS.get(token1) - OPERATORS.get(token2) >= 0) ;
     }
 
-    // Term Tokenizer takes original expression and converts it to ArrayList of
-    // tokens
+    // Parenthesis Check
+    private void parenthesisCheck() {
+        int leftParentheses = 0;
+        int rightParentheses = 0;
+        for (int i = 0; i < this.expression.length(); i++) {
+            if (this.expression.charAt(i) == '(') {
+                leftParentheses++;
+            } else if (this.expression.charAt(i) == ')') {
+                rightParentheses++;
+            }
+        }
+
+        if (leftParentheses != rightParentheses) {
+            throw new RuntimeException("Parentheses error, check parentheses.");
+        }
+    }
+    
+    // Term Tokenizer takes original expression and converts it to ArrayList of tokens
     private void termTokenizer() {
         // contains final list of tokens
         this.tokens = new ArrayList<>();
 
-        int start = 0; // term split starting index
-        StringBuilder multiCharTerm = new StringBuilder(); // term holder
+        int start = 0;  // term split starting index
+        StringBuilder multiCharTerm = new StringBuilder();    // term holder
         for (int i = 0; i < this.expression.length(); i++) {
             Character c = this.expression.charAt(i);
-            if (isOperator(c.toString()) || isSeparator(c.toString())) {
+            if ( isOperator(c.toString() ) || isSeparator(c.toString())  ) {
                 // 1st check for working term and add if it exists
                 if (multiCharTerm.length() > 0) {
                     tokens.add(this.expression.substring(start, i));
@@ -128,9 +127,8 @@ public class Calculator {
         }
     }
 
-    // Takes tokens and converts to Reverse Polish Notation (RPN), this is one where
-    // the operator follows its operands.
-    private void tokensToReversePolishNotation() {
+    // Takes tokens and converts to Reverse Polish Notation (RPN), this is one where the operator follows its operands.
+    private void tokensToReversePolishNotation () {
         // contains final list of tokens in RPN
         this.reverse_polish = new ArrayList<>();
 
@@ -143,22 +141,24 @@ public class Calculator {
                     tokenStack.push(token);
                     break;
                 case ")":
-                    while (tokenStack.peek() != null && !tokenStack.peek().equals("(")) {
-                        reverse_polish.add(tokenStack.pop());
+                    while (tokenStack.peek() != null && !tokenStack.peek().equals("("))
+                    {
+                        reverse_polish.add( tokenStack.pop() );
                     }
                     tokenStack.pop();
                     break;
-                case "^":
                 case "+":
                 case "-":
                 case "*":
                 case "/":
                 case "%":
+                case "^":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
-                    while (tokenStack.size() > 0 && isOperator(tokenStack.peek())) {
-                        if (isPrecedent(token, tokenStack.peek())) {
+                    while (tokenStack.size() > 0 && isOperator(tokenStack.peek()))
+                    {
+                        if ( isPrecedent(token, tokenStack.peek() )) {
                             reverse_polish.add(tokenStack.pop());
                             continue;
                         }
@@ -167,7 +167,7 @@ public class Calculator {
                     // Push the new operator on the stack
                     tokenStack.push(token);
                     break;
-                default: // Default should be a number, there could be test here
+                default:    // Default should be a number, there could be test here
                     this.reverse_polish.add(token);
             }
         }
@@ -178,48 +178,59 @@ public class Calculator {
 
     }
 
-    // calculates values
-    public double calculate(String operator, double x1, double x2) {
-        switch (operator) {
-            case "+":
-                return x1 + x2;
-            case "-":
-                return x1 - x2;
-            case "*":
-                return x1 * x2;
-            case "/":
-                return x1 / x2;
-            case "%":
-                return x1 % x2;
-            case "^":
-                return Math.pow(x1, x2);
-            default:
-                throw new RuntimeException("Unsupported operator: " + operator);
-        }
-    }
-
     // Takes RPN and produces a final result
-    private void rpnToResult() {
+    private void rpnToResult()
+    {
         // stack is used to hold operands and each calculation
         Stack<Double> calcStack = new Stack<Double>();
 
         // RPN is processed, ultimately calcStack has final result
-        for (String token : this.reverse_polish) {
+        for (String token : this.reverse_polish)
+        {
             // If the token is an operator, calculate
-            if (isOperator(token)) {
+            if (isOperator(token))
+            {
                 // Pop the two top entries
-                double x2 = Double.valueOf(calcStack.pop());
-                double x1 = Double.valueOf(calcStack.pop());
+                double a = calcStack.pop();
+                double b = calcStack.pop();
 
                 // Calculate intermediate results
-                result = 0.0;
-                result = calculate(token, x1, x2);
+                switch (token) {
+
+                    case "+":
+                        result = b + a; 
+                        break; 
+                    
+                    case "-":
+                        result = b - a;
+                        break;
+                    
+                    case "*":
+                        result = b * a; 
+                        break; 
+                    
+                    case "/":
+                        result = b / a; 
+                        break; 
+                        
+                    case "%":
+                        result = b % a; 
+                        break; 
+                    
+                    case "^":
+                        result = Math.pow(b,a);
+                        break;
+
+                    default: 
+                        break;
+                }
 
                 // Push intermediate result back onto the stack
-                calcStack.push(result);
+                calcStack.push( result );
             }
             // else the token is a number push it onto the stack
-            else {
+            else
+            {
                 calcStack.push(Double.valueOf(token));
             }
         }
@@ -231,7 +242,7 @@ public class Calculator {
     public String toString() {
         return ("Original expression: " + this.expression + "\n" +
                 "Tokenized expression: " + this.tokens.toString() + "\n" +
-                "Reverse Polish Notation: " + this.reverse_polish.toString() + "\n" +
+                "Reverse Polish Notation: " +this.reverse_polish.toString() + "\n" +
                 "Final result: " + String.format("%.2f", this.result));
     }
 
@@ -263,13 +274,12 @@ public class Calculator {
 
         System.out.println();
 
-        Calculator powerMath = new Calculator("2^4");
-        System.out.println("Power Math\n" + powerMath);
+        Calculator exponentMath = new Calculator("5^6");
+        System.out.println("Exponent Math\n" + exponentMath);
 
         System.out.println();
 
-        System.out.println("Check Parentheses:");
-        Calculator parenthesesError = new Calculator("((100+200)*3");
-
+        Calculator parenthesisImbalanceMath = new Calculator("(100*30))+2");
+        System.out.println("Checking parenthesis imbalance\n" + parenthesisImbalanceMath);
     }
 }
